@@ -3,45 +3,32 @@ let movies = []
 //getAll
 
 export const getAll = (req, res) => {
-    if (movies.length > 0) {
-        res.status(200).json(movies)
-    } else {
-        res.status(204).send('<h3> No existen películas </h3> <br> <h3>Ingresá el producto en /index.html</h3>')
-    }
+    res.render('movies', { movies })
 }
 
 //add
 
 export const addMovie = (req, res) => {
 
-    let movieId = 0
-    const { title, price, thumbnail } = req.body
-
-    let newMovie = {
-        id: movieId,
-        title,
-        price,
-        thumbnail
-    }
-
-    movies.push(newMovie)
-
     if (movies.length === 0) {
-        console.log('length', movies.length)
-        movieId = 1
-    } else {
-        movies.forEach((movie, i) => {
-            movie.id = i + 1;
-            movieId = movie.id
-            console.log("id", movie.id)
-            console.log("movieId", movieId)
-        });
+        const id = 1
+        const { title, price, thumbnail } = req.body
+        console.log(req.body)
+        movies.push({ title, price, thumbnail, id })
+        res.status(201).redirect('/movies')
+    } else if (movies.length > 0) {
+        const newId = movies[movies.length - 1].id
+        const id = newId + 1
+        const { title, price, thumbnail } = req.body
+        movies.push({ title, price, thumbnail, id })
+        res.status(201).redirect('/movies')
     }
 
-    res.status(200).json(movies)
-    console.log('movie', newMovie)
-    console.log("array", movies)
 
+}
+
+export const home = (req, res) => {
+    res.render('home')
 }
 
 //Get con ID
